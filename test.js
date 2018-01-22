@@ -28,11 +28,11 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'getorder'
+const ACTION = 'cancel'
 
 ;(async () => {
   try {
-    const data = '84545304'
+    const data = '84717756'
     const params = {
       market: 'HTML_BTC', // DIVIDEND_DIVISOR or ALL
       orderstatus: 'ALL', // ALL, OK, OPEN, CANCELED

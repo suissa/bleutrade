@@ -230,7 +230,8 @@ const getOptionsPublic = (action, params = {}, data = {}) => ({
 
 const getOptionsMarket = (action, params = {}, data = {}) => ({
   url: 'https://bleutrade.com/api/v2/market/' 
-    + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce,
+    + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
+    + (() => (params.orderid) ? '&orderid=' + params.orderid : '')(),
   agent: false,
   method: 'GET',
   // jar: args.jar,
@@ -310,7 +311,16 @@ const actions = {
   getmarketsummary: async (market = 'HTML_BTC') =>
     getResult(await axios(getOptionsPublic('getmarketsummary', { market }, {}))),
 
-//
+// Market
+
+  cancel: async (orderid) =>
+    getResult(
+      await axios(
+        getAPISign(
+          getOptionsMarket('cancel',
+            { apikey: API_KEY, nonce: Date.now(), orderid }
+          ),
+          API_SECRET))),
 
   getopenorders: async () =>
     getResult(
@@ -396,46 +406,6 @@ const actions = {
 
 
 }
-
-// const ACTIONS = {}
-
-
-// ACTIONS.getcurrencies = () => //console.log('self.getcurrenciesPromise')
-//   actions.getcurrencies()
-
-// ACTIONS.getmarkets = () => //console.log('self.getcurrenciesPromise')
-//   actions.getmarkets()
-
-// ACTIONS.getticker = (args) => //console.log('self.getcurrenciesPromise')
-//   actions.getticker(args)
-
-// ACTIONS.getmarketsummaries = (args) => //console.log('self.getcurrenciesPromise')
-//   actions.getmarketsummaries(args)
-
-// ACTIONS.getmarketsummary = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getmarketsummary(args)
-
-// // market
-// ACTIONS.getopenorders = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getopenorders(args)
-
-// // account
-// ACTIONS.getbalances = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getbalances(args)
-
-// ACTIONS.getbalance = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getbalance(args)
-
-// ACTIONS.getdepositaddress = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getdepositaddress(args)
-
-// ACTIONS.getorder = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getorder(args)
-
-// ACTIONS.getorders = (args) => //console.log('self.getmarketsummaryPromise', args)
-//   actions.getorders(args)
-
-
 
 
 const Bleutrade = (key, secret, requeue = 0) => {
