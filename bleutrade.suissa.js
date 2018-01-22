@@ -11,212 +11,28 @@ const { API_KEY, API_SECRET } = require('../bleutrade_api')
 
 const axios = require('axios')
 
-
-// function BleuTradeClient(key, secret, requeue) {
-// 	const self    = this;
-
-// 	self.key     = key;
-// 	self.secret  = secret;
-// 	self.jar     = request.jar();
-// 	self.requeue = requeue || 0;
-
-// 	function api_query(method, callback, args) {
-// 		const args_tmp = {};
-
-// 		for(const i in args) {
-// 			if(args[i]) {
-// 				args_tmp[i] = args[i];
-// 			}
-// 		}
-
-// 		args = args_tmp;
-
-// 		const options = {
-// 			uri     : 'https://bleutrade.com/api/v2/' + method,
-// 			agent   : false,
-// 			method  : 'GET',
-// 			jar     : self.jar,
-// 			headers : {
-// 				"User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-// 				"Content-type": "application/x-www-form-urlencoded"
-// 			}
-// 		};
-// 		if(publicMethods.indexOf(method) > -1) {
-// 			options.method = 'GET';
-// 			options.uri    = 'https://bleutrade.com/api/v2/public/' + method + '?' + stringify(args);;
-// 		}	else	{
-// 			if (!self.key || !self.secret) {
-// 				throw new Error("Must provide key and secret to make this API request.");
-// 			}	else{
-// 				args.apikey = self.key;
-// 				args.nonce = new Date().getTime();
-// 			 	options.uri += ('?' + stringify(args));
-// 				options.headers.apisign = new hmac("sha512", self.secret).update(options.uri).digest('hex');
-// 			}
-// 		}
-
-// 		request(options, function (err, res, body) {
-// 			if(!body || !res || res.statusCode != 200) {
-// 				const requeue = +self.requeue;
-
-// 				if(requeue) {
-// 					setTimeout(function() {
-// 						api_query(method, callback, args);
-// 					}, requeue);
-// 				}
-// 				else if(typeof callback === 'function') {
-// 					console.error(err);
-// 					console.error(body);
-// 					callback.call(this, "Error in server response", null);
-// 				}
-// 			} else {
-// 				const error  = null;
-// 				const result = null;
-
-// 				try {
-// 					const response = JSON.parse(body);
-
-// 					if(response.error) {
-// 						error = response.error;
-// 					} else {
-// 						result = response.return || response;
-// 					}
-// 				} catch(e) {
-// 					error = "Error parsing server response: " + e.message;
-// 				}
-// 				if (typeof callback === 'function') {
-// 					callback.call(this, error, result);
-// 				}
-// 			}
-// 		});
-// 	}
-
-// 	// public
-// 	self.getcurrencies = function(callback) {
-//     // actions.getcurrencies()
-// 		api_query('getcurrencies', callback);
-// 	};
-
-
-// 	self.getmarkets = function(callback) {
-// 		api_query('getmarkets', callback);
-// 	};
-
-
-// 	self.getticker = function(market, callback) {
-// 		api_query('getticker', callback, {market: market});
-//   };
-
-// 	self.getmarketsummaries = function(callback) {
-// 		api_query('getmarketsummaries', callback);
-// 	};
-
-// 	self.getmarketsummary = function(market, callback) {
-// 		api_query('getmarketsummaries', callback, {market: market});
-//   };
-
-
-// 	self.getorderbook = function(market, type, depth, callback) {
-// 		api_query('getorderbook', callback, {market: market, type: type, depth: depth});
-// 	};
-
-// 	self.getmarkethistory = function(market, count, callback) {
-// 		api_query('getmarkethistory', callback, {market: market, count: count});
-// 	};
-
-// 	self.getcandles = function(market, period, count, lasthours, callback) {
-// 		api_query('getorderbook', callback, {market: market, period: period, count: count, lasthours: lasthours});
-// 	};
-
-// 	////////////////////////////////////////////////////////////////////////
-// 	// Private
-// 	////////////////////////////////////////////////////////////////////////
-
-// 	// Market
-// 	self.market_buylimit = function(market, rate, quantity, comments, callback) {
-// 		api_query('market/buylimit', callback, {market: market, rate: rate, quantity: quantity, comments: comments});
-// 	};
-
-// 	self.market_selllimit = function(market, rate, quantity, comments, callback) {
-// 		api_query('market/selllimit', callback, {market: market, rate: rate, quantity: quantity, comments: comments});
-// 	};
-
-// 	self.market_cancel = function(orderid, callback) {
-// 		api_query('market/cancel', callback, {orderid: orderid});
-// 	};
-
-// 	self.market_getopenorders = function(callback) {
-// 		api_query('market/getopenorders', callback);
-// 	};
-
-// 	// Account
-// 	self.getbalances = function(currencies, callback) {
-// 		api_query('account/getbalances', callback, { currencies: currencies });
-// 	};
-
-// 	self.getbalance = function(currency, callback) {
-// 		api_query('account/getbalance', callback, { currency: currency });
-// 	};
-
-// 	self.getdepositaddress = function(currency, callback) {
-// 		api_query('account/getdepositaddress', callback, { currency: currency });
-// 	};
-
-// 	self.withdraw = function(currency, quantity, address, callback) {
-// 		api_query('account/withdraw', callback, { currency: currency, quantity: quantity, address: address });
-// 	};
-
-// 	self.transfer = function(currency, quantity, touser, callback) {
-// 		api_query('account/transfer', callback, { currency: currency, quantity: quantity, touser: touser });
-// 	};
-
-// 	self.getorder = function(orderid, callback) {
-// 		api_query('account/getorder', callback, { orderid: orderid });
-// 	};
-
-// 	self.getorders = function(market, orderstatus, callback) {
-// 		api_query('account/getorders', callback, { market: market, orderstatus: orderstatus });
-// 	};
-
-// 	self.getorderhistory = function(orderid, callback) {
-// 		api_query('account/getorderhistory', callback, { orderid: orderid });
-// 	};
-
-// 	self.getdeposithistory = function(callback) {
-// 		api_query('account/getdeposithistory', callback);
-// 	};
-
-// 	self.getwithdrawhistory = function(callback) {
-// 		api_query('account/getwithdrawhistory', callback);
-// 	};
-
-// 	self.chatsend = function(channel, text, callback) {
-// 		api_query('account/chatsend', callback, {channel: channel, text: text});
-// 	};
-
-
-// 	////////////////////////////////////////////////////////////////////////
-// 	// Push API
-// 	////////////////////////////////////////////////////////////////////////
-// 	self.subscribe = function() {
-// 		io.on('message', self.handlePushEvents.bind(this));
-// 	};
-
-// 	self.handlePushEvents = function(data) {
-// 	  const channel = data[0];
-// 		if(channel === 'Bleutrade_CH1') {
-// 			const msgType = data[1][0];
-// 			self.emit('msgType', data);
-// 		}
-// 	};
-
-// }
-
-// util.inherits(BleuTradeClient, EventEmitter);
-
-
 const getOptionsPublic = (action, params = {}, data = {}) => ({
   url: 'https://bleutrade.com/api/v2/public/' + action,
+  agent: false,
+  method: 'GET',
+  // jar: args.jar,
+  data,
+  params,
+  headers: {
+    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+    "Content-type": "application/x-www-form-urlencoded"
+  }
+})
+// market
+// period
+// count
+// lasthours
+const getOptionsCandlesPublic = (action, params = {}, data = {}) => ({
+  url: 'https://bleutrade.com/api/v2/public/' + action
+    + (() => (params.market) ? '?market=' + params.market : '')()
+    + (() => (params.period) ? '&period=' + params.period : '')()
+    + (() => (params.count) ? '&count=' + params.count : '')()
+    + (() => (params.lasthours) ? '&lasthours=' + params.lasthours : '')(),
   agent: false,
   method: 'GET',
   // jar: args.jar,
@@ -327,6 +143,21 @@ const actions = {
 
   getmarketsummary: async (market = 'HTML_BTC') =>
     getResult(await axios(getOptionsPublic('getmarketsummary', { market }, {}))),
+
+  getcandles: async ({market = 'HTML_BTC', period = '30m', count = 1000, lasthours = 24}) =>{
+    const opt = getOptionsCandlesPublic('getcandles',
+      {
+        market,
+        period, // 1m, 2m, 3m, 4m, 5m, 6m, 10m, 12m, 15m, 20m, 30m, 1h, 2h, 3h, 4h, 6h, 8h, 12h, 1d
+        count, // default: 1000, max: 999999
+        lasthours, // default: 24, max: 2160
+      }, {})
+      console.log('------------------------------------');
+    console.log(opt);
+      console.log('------------------------------------');
+    getResult(
+      await axios(opt))
+      },
 
 // Market
 

@@ -28,7 +28,7 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'cancel'
+const ACTION = 'getcandles'
 
 ;(async () => {
   try {
@@ -46,12 +46,18 @@ const ACTION = 'cancel'
       quantity: 1000, 
       // comments: , 
     }
-    const result = await bleutrade[ACTION](data)
+    const params3 = {
+      market: 'HTML_BTC',
+      period: '30m',
+      count: 1000,
+      lasthours: 48,
+    }
+    const result = await bleutrade[ACTION](params3)
 
     console.log('------------------------------------');
     console.log(ACTION+' result: ', result);
     console.log('------------------------------------');
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error.stack)
   }
 })()
