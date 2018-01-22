@@ -249,7 +249,8 @@ const getOptionsAccount = (action, params = {}, data = {}) => ({
   // url: getURL(action, params),
   url: 'https://bleutrade.com/api/v2/account/'
     + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
-    + '&currency=' + params.currency,
+    + (() => (params.currency) ? '&currency=' + params.currency : '')()
+    + (() => (params.orderid) ? '&orderid=' + params.orderid : '')(),
   agent: false,
   method: 'GET',
   // jar: args.jar,
@@ -347,7 +348,7 @@ const actions = {
           ),
           API_SECRET))),
 
-  getorder: async (orderid = '76678139') =>
+  getorder: async (orderid = '84545304') =>
     getResult(
       await axios(
         getAPISign(
@@ -356,20 +357,29 @@ const actions = {
           ),
           API_SECRET))),
 
-  // getorderhistory: async (config) => // orderid
-  //   getResult(
-  //     await axios(
-  //       getAPISign(
-  //         getOptionsOrdersAccount('getorderhistory',
-  //           { apikey: API_KEY, nonce: Date.now(), config }
-  //         ),
-  //         API_SECRET))),
+  getorderhistory: async (orderid) => // orderid
+    getResult(
+      await axios(
+        getAPISign(
+          getOptionsAccount('getorderhistory',
+            { apikey: API_KEY, nonce: Date.now(), orderid }
+          ),
+          API_SECRET))),
 
   getdeposithistory: async () =>
     getResult(
       await axios(
         getAPISign(
           getOptionsAccount('getdeposithistory',
+            { apikey: API_KEY, nonce: Date.now() }
+          ),
+          API_SECRET))),
+
+  getwithdrawhistory: async () =>
+    getResult(
+      await axios(
+        getAPISign(
+          getOptionsAccount('getwithdrawhistory',
             { apikey: API_KEY, nonce: Date.now() }
           ),
           API_SECRET))),

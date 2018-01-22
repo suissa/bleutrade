@@ -28,12 +28,11 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'getwithdrawhistory'
+const ACTION = 'getorder'
 
 ;(async () => {
   try {
-    const action = ACTION + 'Promise'
-    const data = 'HTML'
+    const data = '84545304'
     const params = {
       market: 'HTML_BTC', // DIVIDEND_DIVISOR or ALL
       orderstatus: 'ALL', // ALL, OK, OPEN, CANCELED
@@ -43,7 +42,7 @@ const ACTION = 'getwithdrawhistory'
     const result = await bleutrade[ACTION](data)
 
     console.log('------------------------------------');
-    console.log(action+' result: ', result);
+    console.log(ACTION+' result: ', result);
     console.log('------------------------------------');
   } catch (error) {
     throw new Error(error)
