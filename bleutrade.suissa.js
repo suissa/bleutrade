@@ -374,6 +374,16 @@ const actions = {
           ),
           API_SECRET))),
 
+  getwithdrawhistory: async () =>
+    getResult(
+      await axios(
+        getAPISign(
+          getOptionsAccount('getwithdrawhistory',
+            { apikey: API_KEY, nonce: Date.now() }
+          ),
+          API_SECRET))),
+
+
 
 }
 

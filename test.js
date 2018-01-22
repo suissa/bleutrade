@@ -28,7 +28,7 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'getdeposithistory'
+const ACTION = 'getwithdrawhistory'
 
 ;(async () => {
   try {
