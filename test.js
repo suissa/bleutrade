@@ -32,12 +32,19 @@ const ACTION = 'cancel'
 
 ;(async () => {
   try {
-    const data = '84717756'
-    const params = {
-      market: 'HTML_BTC', // DIVIDEND_DIVISOR or ALL
-      orderstatus: 'ALL', // ALL, OK, OPEN, CANCELED
-      ordertype: 'ALL', // ALL, BUY, SELL
-      // depth: , // optional, default is 500, max is 20000
+    const data = '84719493'
+    const html = 'HTML'
+    // const params = {
+    //   market: 'HTML_BTC', // DIVIDEND_DIVISOR or ALL
+    //   orderstatus: 'ALL', // ALL, OK, OPEN, CANCELED
+    //   ordertype: 'ALL', // ALL, BUY, SELL
+    //   // depth: , // optional, default is 500, max is 20000
+    // }
+    const params2 = {
+      market: 'HTML_BTC', 
+      rate: 0.00000200, 
+      quantity: 1000, 
+      // comments: , 
     }
     const result = await bleutrade[ACTION](data)
 

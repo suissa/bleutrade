@@ -243,6 +243,23 @@ const getOptionsMarket = (action, params = {}, data = {}) => ({
   }
 })
 
+const getOptionsSellMarket = (action, params = {}, data = {}) => ({
+  url: 'https://bleutrade.com/api/v2/market/'
+    + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
+    + (() => (params.config.market) ? '&market=' + params.config.market : '')()
+    + (() => (params.config.rate) ? '&rate=' + params.config.rate : '')()
+    + (() => (params.config.quantity) ? '&quantity=' + params.config.quantity : '')(),
+  agent: false,
+  method: 'GET',
+  // jar: args.jar,
+  data,
+  // params,
+  headers: {
+    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+    "Content-type": "application/x-www-form-urlencoded"
+  }
+})
+
 const getURL = (action, params) => //API_URL + action + '?' + stringify(params)
   console.log(API_URL + action + '?' + stringify(params))
 
@@ -312,6 +329,24 @@ const actions = {
     getResult(await axios(getOptionsPublic('getmarketsummary', { market }, {}))),
 
 // Market
+
+  buylimit: async (orderid) =>
+    getResult(
+      await axios(
+        getAPISign(
+          getOptionsMarket('buylimit',
+            { apikey: API_KEY, nonce: Date.now(), orderid }
+          ),
+          API_SECRET))),
+
+  selllimit: async (config) =>
+    getResult(
+      await axios(
+        getAPISign(
+          getOptionsSellMarket('selllimit',
+            { apikey: API_KEY, nonce: Date.now(), config }
+          ),
+          API_SECRET))),
 
   cancel: async (orderid) =>
     getResult(
