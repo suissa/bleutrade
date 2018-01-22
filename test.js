@@ -28,7 +28,7 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'getorders'
+const ACTION = 'getdeposithistory'
 
 ;(async () => {
   try {
@@ -40,7 +40,7 @@ const ACTION = 'getorders'
       ordertype: 'ALL', // ALL, BUY, SELL
       // depth: , // optional, default is 500, max is 20000
     }
-    const result = await bleutrade[ACTION](params)
+    const result = await bleutrade[ACTION](data)
 
     console.log('------------------------------------');
     console.log(action+' result: ', result);

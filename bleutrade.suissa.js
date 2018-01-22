@@ -356,16 +356,25 @@ const actions = {
           ),
           API_SECRET))),
 
-  getorders: async (config) => 
+  // getorderhistory: async (config) => // orderid
+  //   getResult(
+  //     await axios(
+  //       getAPISign(
+  //         getOptionsOrdersAccount('getorderhistory',
+  //           { apikey: API_KEY, nonce: Date.now(), config }
+  //         ),
+  //         API_SECRET))),
+
+  getdeposithistory: async () =>
     getResult(
       await axios(
         getAPISign(
-          getOptionsOrdersAccount('getorders',
-            { apikey: API_KEY, nonce: Date.now(), config }
+          getOptionsAccount('getdeposithistory',
+            { apikey: API_KEY, nonce: Date.now() }
           ),
           API_SECRET))),
 
-          
+
 }
 
 // const ACTIONS = {}
