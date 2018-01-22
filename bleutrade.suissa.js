@@ -347,7 +347,7 @@ const actions = {
           ),
           API_SECRET))),
 
-  getorder: async (orderid) =>
+  getorder: async (orderid = '76678139') =>
     getResult(
       await axios(
         getAPISign(
@@ -356,21 +356,16 @@ const actions = {
           ),
           API_SECRET))),
 
-  getorders: async (config) => {
-
-    console.log('config: ', config);
-    const opt = getOptionsOrdersAccount('getorders',
-      { apikey: API_KEY, nonce: Date.now(), config }
-    )
-    console.log('------------------------------------');
-    console.log(opt);
-    console.log('------------------------------------');
-    return getResult(
+  getorders: async (config) => 
+    getResult(
       await axios(
         getAPISign(
-          opt,
-          API_SECRET)))
-  },
+          getOptionsOrdersAccount('getorders',
+            { apikey: API_KEY, nonce: Date.now(), config }
+          ),
+          API_SECRET))),
+
+          
 }
 
 // const ACTIONS = {}
