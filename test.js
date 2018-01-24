@@ -28,7 +28,7 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'getcandles'
+const ACTION = 'getPositiveChangeAndLastAboveAVG'
 
 ;(async () => {
   try {
@@ -52,7 +52,7 @@ const ACTION = 'getcandles'
       count: 1000,
       lasthours: 48,
     }
-    const result = await bleutrade[ACTION](params3)
+    const result = await bleutrade[ACTION]()
 
     console.log('------------------------------------');
     console.log(ACTION+' result: ', result);

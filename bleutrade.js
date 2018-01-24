@@ -89,6 +89,9 @@ function BleuTradeClient(key, secret, requeue) {
 				// console.log('------------------------------------');
 				// console.log('NAO CHEGA AUQI PORRA', typeof callback);
 				// console.log('------------------------------------');
+
+				console.log('\n\n\n\napi_query error: ', error);
+				console.log('api_query result: ', result);
 				if (typeof callback === 'function') {
 					// console.log('\n\napi_query callback function result: ', result);
 					callback.call(this, error, result);

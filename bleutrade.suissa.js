@@ -144,8 +144,11 @@ const actions = {
   getmarketsummary: async (market = 'HTML_BTC') =>
     getResult(await axios(getOptionsPublic('getmarketsummary', { market }, {}))),
 
+
+    // api_query('getorderbook', callback, { market: market, period: period, count: count, lasthours: lasthours });
+
   getcandles: async ({market = 'HTML_BTC', period = '30m', count = 1000, lasthours = 24}) =>{
-    const opt = getOptionsCandlesPublic('getcandles',
+    const opt = getOptionsCandlesPublic('getorderbook',
       {
         market,
         period, // 1m, 2m, 3m, 4m, 5m, 6m, 10m, 12m, 15m, 20m, 30m, 1h, 2h, 3h, 4h, 6h, 8h, 12h, 1d
@@ -158,6 +161,7 @@ const actions = {
     getResult(
       await axios(opt))
       },
+
 
 // Market
 
@@ -260,17 +264,134 @@ const actions = {
           ),
           API_SECRET))),
 
-  getwithdrawhistory: async () =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getwithdrawhistory',
-            { apikey: API_KEY, nonce: Date.now() }
-          ),
-          API_SECRET))),
+  // getwithdrawhistory: async () =>
+  //   getResult(
+  //     await axios(
+  //       getAPISign(
+  //         getOptionsAccount('getwithdrawhistory',
+  //           { apikey: API_KEY, nonce: Date.now() }
+  //         ),
+  //         API_SECRET))),
 
 
+}
 
+const getPercentage = (total, percent) => total * ( percent / 100 )
+
+
+const getDailyChange = (coin) => {
+
+  const prevDay = coin.PrevDay
+  const curDay = coin.Last
+}
+
+
+const coin_example = {
+  MarketName: 'ADC_BTC',
+  MarketCurrency: 'Audiocoin',
+  BaseCurrency: 'Bitcoin',
+  PrevDay: '0.00000105',
+  High: '0.00000127',
+  Low: '0.00000097',
+  Last: '0.00000120',
+  Average: '0.00000110',
+  Volume: '211793.48142899',
+  BaseVolume: '0.23197773',
+  TimeStamp: '2018-01-23 18:57:18',
+  Bid: '0.00000107',
+  Ask: '0.00000111',
+  IsActive: 'true'
+}
+
+const byMarketname_BTC = (coin) => coin.MarketName.endsWith('_BTC')
+
+const byPositiveAverageDailyChange = (coin) => Number(coin.Average) > Number(coin.PrevDay)
+const byPositiveLastDailyChange = (coin) => Number(coin.Last) > Number(coin.PrevDay)
+const byPositiveLastOrAVGDailyChange = (coin) => 
+  (Number(coin.Last) > Number(coin.PrevDay) || Number(coin.Average) > Number(coin.PrevDay))
+
+const byLastAndAVGChangesPositives = (coin) => 
+  (Number(coin.LastChange) > 0.00 && Number(coin.AverageChange) > 0.00)
+
+const byPositiveChangeAndLastAboveAVG = (coin) => coin.Last < coin.Average
+
+
+const byASC = (field) => (a, b) => {
+  if (Number(a[field]) > Number(b[field])) {
+    return 1;
+  }
+  if (Number(a[field]) < Number(b[field])) {
+    return -1;
+  }
+  // a must be equal to b
+  return 0;
+}
+const byDESC = (field) => (a, b) => {
+  if (Number(a[field]) > Number(b[field])) {
+    return -1;
+  }
+  if (Number(a[field]) < Number(b[field])) {
+    return 1;
+  }
+  // a must be equal to b
+  return 0;
+}
+
+const getProportion = (x, y) => x / y 
+
+const getChange = (lower, bigger) => ( bigger / lower - 1 ) * 100
+
+const toChangeData = (coin) => {
+  const obj = {}
+  // console.log('------------------------------------');
+  // // console.log('coin: ', coin);
+  // console.log('coin.BaseCurrency: ', coin.BaseCurrency);
+  // console.log('coin.MarketName: ', coin.MarketName);
+  // console.log('------------------------------------');
+
+  obj.MarketName = coin.MarketName
+
+  obj.AverageChange = Number(Number(getChange(coin.PrevDay, coin.Average)).toFixed(2))
+  obj.LastChange = Number(Number(getChange(coin.PrevDay, coin.Last)).toFixed(2))
+
+  obj.PrevDay = Number(coin.PrevDay)
+  obj.Last = Number(coin.Last)
+  obj.Average = Number(coin.Average)
+  
+  return obj
+}
+
+
+const moreVolatile = async () => {
+  try {
+    const res = await actions.getmarketsummaries()
+
+    const result = res.filter(byPositiveLastDailyChange)
+      .map(toChangeData)
+      .filter(byMarketname_BTC)
+      .filter(byLastAndAVGChangesPositives)
+      .sort(byDESC('LastChange'))
+
+    return result
+  } catch (error) {
+    throw new Error(error.stack)
+  }
+}
+
+const getPositiveChangeAndLastAboveAVG = async () => {
+  try {
+    const res = await moreVolatile()
+
+    const result = res.filter(byPositiveChangeAndLastAboveAVG)
+    return result
+  } catch (error) {
+    throw new Error(error.stack)
+  }
+
+}
+const Suisseba = {
+  moreVolatile,
+  getPositiveChangeAndLastAboveAVG
 }
 
 
@@ -283,7 +404,7 @@ const Bleutrade = (key, secret, requeue = 0) => {
   config.requeue = requeue
 
 
-  return actions
+  return Object.assign(actions, Suisseba)
 }
 
 module.exports = Bleutrade;
