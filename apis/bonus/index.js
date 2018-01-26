@@ -175,6 +175,13 @@ const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
     console.log('------------------------------------');
 
     console.log('Market: ', market);
+    console.log('------------------------------------');
+
+    console.log('Period minutes: ', period);
+    console.log('End TimeStamp: ', startObj.TimeStamp)
+    console.log('Start TimeStamp: ', endObj.TimeStamp);
+    console.log('------------------------------------');
+
     console.log('Current Price: ', startObj.Price)
     console.log('Previous Price: ', endObj.Price);
     console.log('Change %: ', change);
@@ -200,7 +207,7 @@ const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
 
 (async () => {
   const fn = getPriceChange
-  console.log('getPriceChange: ', await fn())
+  console.log('getPriceChange: ', await fn('DOGE_BTC'))
 })()
 
 
