@@ -29,7 +29,7 @@ const toChange = (obj) => {
 }
 
 const API = 'bonus'
-const ACTION = 'getPriceChange'
+const ACTION = 'moreVolatile'
 
 ;(async () => {
   try {
@@ -55,7 +55,7 @@ const ACTION = 'getPriceChange'
     }
 
     const market = 'DOGE_BTC'
-    const result = await bleutrade[API][ACTION](params3.market, 120)
+    const result = await bleutrade[API][ACTION]()
 
     console.log('------------------------------------');
     console.log(ACTION + ' result: ', result);

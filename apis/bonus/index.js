@@ -123,21 +123,22 @@ const toChangeData = (coin) => {
 }
 
 
-const moreVolatile = async () => {
-  try {
-    const res = await actions.public.getmarketsummaries()
+const moreVolatile = require('./moreVolatile')
+// async () => {
+//   try {
+//     const res = await actions.public.getmarketsummaries()
 
-    const result = res.filter(byPositiveLastDailyChange)
-      .map(toChangeData)
-      .filter(byMarketname_BTC)
-      .filter(byLastAndAVGChangesPositives)
-      .sort(byDESC('LastChange'))
+//     const result = res.filter(byPositiveLastDailyChange)
+//       .map(toChangeData)
+//       .filter(byMarketname_BTC)
+//       .filter(byLastAndAVGChangesPositives)
+//       .sort(byDESC('LastChange'))
 
-    return result
-  } catch (error) {
-    throw new Error(error.stack)
-  }
-}
+//     return result
+//   } catch (error) {
+//     throw new Error(error.stack)
+//   }
+// }
 
 const getPositiveChangeAndLastAboveAVG = async () => {
   try {
@@ -151,13 +152,13 @@ const getPositiveChangeAndLastAboveAVG = async () => {
 
 }
 
+const isAbovePeriod = (start, period) => (obj) =>
+  (getDateTimestamp(obj.TimeStamp) >= start - period)
+
 const getStartObj = (list) => list[0]
 const getEndObj = (list, startObj, periodMinutes) => 
-  list.filter(ifIsInPeriod(getDateTimestamp(startObj.TimeStamp), periodMinutes))
+  list.filter(isAbovePeriod(getDateTimestamp(startObj.TimeStamp), periodMinutes))
       .reverse()[0]
-
-const ifIsInPeriod = (start, period) => (obj) =>
-  (getDateTimestamp(obj.TimeStamp) >= start - period)
 
 const transformMinutesInMS = (minutes) => minutes * MINUTES_IN_MS
 
@@ -379,7 +380,6 @@ const toWrapperCandles = (candleTime) => (arr, cur, i, list) => {
   const end = start - candlePeriod
 
   const isIn = isInPeriod(start, end , time)
-  // 1406668175000 1406668115000 1406668125000
   console.log('------------------------------------');
   console.log('isIn: ', isIn, start, end, time, cur);
   console.log('------------------------------------');
@@ -401,14 +401,6 @@ const getCandles = (listCandle) => {
   console.log('list: ', list);
   const list2 = list.reduce(toWrapperCandles(candleSize))
   console.log('list2: ', list2);
-  // const candles = list2.map((candle) => candle.reduce(toCandle, {}))
-  // const candles = list.reduce(toCandle(candleSize), {})
-  // const candles = list.reduce(toCandle, {})
-  // console.log('------------------------------------');
-  // console.log('candles: ', candles);
-  // console.log('------------------------------------');
-
-  // return candles
 }
 
 
