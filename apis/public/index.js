@@ -5,7 +5,7 @@ const config = {
   API_URL
 }
 
-const { getResult, getAPISign, getURL } = require('../../helpers')(config)
+const { getResult, getAPISign, getURL } = require('../../helpers')
 
 const getOptionsPublic = require('./getOptionsPublic')(config)
 const getOptionsCandlesPublic = require('./getOptionsCandlesPublic')(config)
