@@ -11,18 +11,18 @@ const { API_KEY, API_SECRET } = require('../bleutrade_api')
 
 const axios = require('axios')
 
-const getOptionsPublic = (action, params = {}, data = {}) => ({
-  url: 'https://bleutrade.com/api/v2/public/' + action,
-  agent: false,
-  method: 'GET',
-  // jar: args.jar,
-  data,
-  params,
-  headers: {
-    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-    "Content-type": "application/x-www-form-urlencoded"
-  }
-})
+// const getOptionsPublic = (action, params = {}, data = {}) => ({
+//   url: 'https://bleutrade.com/api/v2/public/' + action,
+//   agent: false,
+//   method: 'GET',
+//   // jar: args.jar,
+//   data,
+//   params,
+//   headers: {
+//     "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+//     "Content-type": "application/x-www-form-urlencoded"
+//   }
+// })
 // market
 // period
 // count
@@ -76,45 +76,45 @@ const getOptionsPublic = (action, params = {}, data = {}) => ({
 //   }
 // })
 
-const getURL = (action, params) => //API_URL + action + '?' + stringify(params)
-  console.log(API_URL + action + '?' + stringify(params))
+// const getURL = (action, params) => //API_URL + action + '?' + stringify(params)
+//   console.log(API_URL + action + '?' + stringify(params))
 
-const getOptionsAccount = (action, params = {}, data = {}) => ({
-  // url: getURL(action, params),
-  url: 'https://bleutrade.com/api/v2/account/'
-    + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
-    + (() => (params.currency) ? '&currency=' + params.currency : '')()
-    + (() => (params.orderid) ? '&orderid=' + params.orderid : '')(),
-  agent: false,
-  method: 'GET',
-  // jar: args.jar,
-  data,
-  // params,
-  headers: {
-    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-    "Content-type": "application/x-www-form-urlencoded"
-  }
-})
+// const getOptionsAccount = (action, params = {}, data = {}) => ({
+//   // url: getURL(action, params),
+//   url: 'https://bleutrade.com/api/v2/account/'
+//     + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
+//     + (() => (params.currency) ? '&currency=' + params.currency : '')()
+//     + (() => (params.orderid) ? '&orderid=' + params.orderid : '')(),
+//   agent: false,
+//   method: 'GET',
+//   // jar: args.jar,
+//   data,
+//   // params,
+//   headers: {
+//     "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+//     "Content-type": "application/x-www-form-urlencoded"
+//   }
+// })
 
-const getOptionsOrdersAccount = (action, params = {}, data = {}) => ({
-  // url: getURL(action, params),
-  url: 'https://bleutrade.com/api/v2/account/'
-    + action + 
-    '?apikey=' + params.apikey + 
-    '&nonce=' + params.nonce + 
-    '&market=' + params.config.market +
-    '&orderstatus=' + params.config.orderstatus +
-    '&ordertype=' + params.config.ordertype,
-  agent: false,
-  method: 'GET',
-  // jar: args.jar,
-  data,
-  // params,
-  headers: {
-    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-    "Content-type": "application/x-www-form-urlencoded"
-  }
-})
+// const getOptionsOrdersAccount = (action, params = {}, data = {}) => ({
+//   // url: getURL(action, params),
+//   url: 'https://bleutrade.com/api/v2/account/'
+//     + action + 
+//     '?apikey=' + params.apikey + 
+//     '&nonce=' + params.nonce + 
+//     '&market=' + params.config.market +
+//     '&orderstatus=' + params.config.orderstatus +
+//     '&ordertype=' + params.config.ordertype,
+//   agent: false,
+//   method: 'GET',
+//   // jar: args.jar,
+//   data,
+//   // params,
+//   headers: {
+//     "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+//     "Content-type": "application/x-www-form-urlencoded"
+//   }
+// })
 
 // const getResult = (result) =>
 //   (result.data.success === 'true') ? result.data.result : []
@@ -128,7 +128,7 @@ const getOptionsOrdersAccount = (action, params = {}, data = {}) => ({
 //   return options
 // }
 
-const { getResult, getAPISign } = require('./helpers')
+const { getResult, getAPISign, getURL } = require('./helpers')
 
 const actions = {
   public: require('./apis/public'),

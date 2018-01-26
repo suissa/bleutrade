@@ -1,12 +1,11 @@
 const axios = require('axios')
 const API_URL = 'https://bleutrade.com/api/v2/'
-const { API_KEY, API_SECRET } = require('../../bleutrade_api')
 
 const config = {
-  API_URL, API_KEY, API_SECRET
+  API_URL
 }
 
-const { getResult, getAPISign } = require('../../helpers')
+const { getResult, getAPISign, getURL } = require('../../helpers')(config)
 
 const getOptionsPublic = require('./getOptionsPublic')(config)
 const getOptionsCandlesPublic = require('./getOptionsCandlesPublic')(config)

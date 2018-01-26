@@ -6,7 +6,7 @@ const config = {
   API_URL, API_KEY, API_SECRET
 }
 
-const { getResult, getAPISign } = require('../../helpers')
+const { getResult, getAPISign, getURL } = require('../../helpers')(config)
 
 
 const getOptionsMarket = require('./getOptionsMarket')(config)
