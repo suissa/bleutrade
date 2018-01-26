@@ -3,9 +3,7 @@ const { byPositiveChangeAndLastAboveAVG } = require('../../helpers')
 const getPositiveChangeAndLastAboveAVG = async () => {
   try {
     const res = await moreVolatile()
-
-    const result = res.filter(byPositiveChangeAndLastAboveAVG)
-    return result
+    return res.filter(byPositiveChangeAndLastAboveAVG)
   } catch (error) {
     throw new Error(error.stack)
   }
