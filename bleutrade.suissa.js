@@ -27,54 +27,54 @@ const getOptionsPublic = (action, params = {}, data = {}) => ({
 // period
 // count
 // lasthours
-const getOptionsCandlesPublic = (action, params = {}, data = {}) => ({
-  url: 'https://bleutrade.com/api/v2/public/' + action
-    + (() => (params.market) ? '?market=' + params.market : '')()
-    + (() => (params.period) ? '&period=' + params.period : '')()
-    + (() => (params.count) ? '&count=' + params.count : '')()
-    + (() => (params.lasthours) ? '&lasthours=' + params.lasthours : '')(),
-  agent: false,
-  method: 'GET',
-  // jar: args.jar,
-  data,
-  params,
-  headers: {
-    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-    "Content-type": "application/x-www-form-urlencoded"
-  }
-})
+// const getOptionsCandlesPublic = (action, params = {}, data = {}) => ({
+//   url: 'https://bleutrade.com/api/v2/public/' + action
+//     + (() => (params.market) ? '?market=' + params.market : '')()
+//     + (() => (params.period) ? '&period=' + params.period : '')()
+//     + (() => (params.count) ? '&count=' + params.count : '')()
+//     + (() => (params.lasthours) ? '&lasthours=' + params.lasthours : '')(),
+//   agent: false,
+//   method: 'GET',
+//   // jar: args.jar,
+//   data,
+//   params,
+//   headers: {
+//     "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+//     "Content-type": "application/x-www-form-urlencoded"
+//   }
+// })
 
-const getOptionsMarket = (action, params = {}, data = {}) => ({
-  url: 'https://bleutrade.com/api/v2/market/' 
-    + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
-    + (() => (params.orderid) ? '&orderid=' + params.orderid : '')(),
-  agent: false,
-  method: 'GET',
-  // jar: args.jar,
-  data,
-  // params,
-  headers: {
-    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-    "Content-type": "application/x-www-form-urlencoded"
-  }
-})
+// const getOptionsMarket = (action, params = {}, data = {}) => ({
+//   url: 'https://bleutrade.com/api/v2/market/' 
+//     + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
+//     + (() => (params.orderid) ? '&orderid=' + params.orderid : '')(),
+//   agent: false,
+//   method: 'GET',
+//   // jar: args.jar,
+//   data,
+//   // params,
+//   headers: {
+//     "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+//     "Content-type": "application/x-www-form-urlencoded"
+//   }
+// })
 
-const getOptionsSellMarket = (action, params = {}, data = {}) => ({
-  url: 'https://bleutrade.com/api/v2/market/'
-    + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
-    + (() => (params.config.market) ? '&market=' + params.config.market : '')()
-    + (() => (params.config.rate) ? '&rate=' + params.config.rate : '')()
-    + (() => (params.config.quantity) ? '&quantity=' + params.config.quantity : '')(),
-  agent: false,
-  method: 'GET',
-  // jar: args.jar,
-  data,
-  // params,
-  headers: {
-    "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
-    "Content-type": "application/x-www-form-urlencoded"
-  }
-})
+// const getOptionsSellMarket = (action, params = {}, data = {}) => ({
+//   url: 'https://bleutrade.com/api/v2/market/'
+//     + action + '?apikey=' + params.apikey + '&nonce=' + params.nonce
+//     + (() => (params.config.market) ? '&market=' + params.config.market : '')()
+//     + (() => (params.config.rate) ? '&rate=' + params.config.rate : '')()
+//     + (() => (params.config.quantity) ? '&quantity=' + params.config.quantity : '')(),
+//   agent: false,
+//   method: 'GET',
+//   // jar: args.jar,
+//   data,
+//   // params,
+//   headers: {
+//     "User-Agent": "Mozilla/4.0 (compatible; Bleutrade API node client)",
+//     "Content-type": "application/x-www-form-urlencoded"
+//   }
+// })
 
 const getURL = (action, params) => //API_URL + action + '?' + stringify(params)
   console.log(API_URL + action + '?' + stringify(params))
@@ -116,149 +116,24 @@ const getOptionsOrdersAccount = (action, params = {}, data = {}) => ({
   }
 })
 
-const getResult = (result) =>
-  (result.data.success === 'true') ? result.data.result : []
+// const getResult = (result) =>
+//   (result.data.success === 'true') ? result.data.result : []
 
 
-const getAPISign = (options, apisecret) => {
-  options.headers.apisign = new hmac("sha512", apisecret)
-                                    .update(options.url)
-                                    .digest('hex')
+// const getAPISign = (options, apisecret) => {
+//   options.headers.apisign = new hmac("sha512", apisecret)
+//                                     .update(options.url)
+//                                     .digest('hex')
 
-  return options
-}
+//   return options
+// }
+
+const { getResult, getAPISign } = require('./helpers')
 
 const actions = {
-  getcurrencies: async (args = {}) =>
-    getResult(await axios(getOptionsPublic('getcurrencies', args))),
-
-  getmarkets: async (args = {}) =>
-    getResult(await axios(getOptionsPublic('getmarkets', args))),
-
-  getticker: async (market = 'HTML_BTC') =>
-    getResult(await axios(getOptionsPublic('getticker', { market }, {}))),
-
-  getmarketsummaries: async () =>
-    getResult(await axios(getOptionsPublic('getmarketsummaries'))),
-
-  getmarketsummary: async (market = 'HTML_BTC') =>
-    getResult(await axios(getOptionsPublic('getmarketsummary', { market }, {}))),
-
-
-    // api_query('getorderbook', callback, { market: market, period: period, count: count, lasthours: lasthours });
-  
-
-// Market
-
-  buylimit: async (orderid) =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsMarket('buylimit',
-            { apikey: API_KEY, nonce: Date.now(), orderid }
-          ),
-          API_SECRET))),
-
-  selllimit: async (config) =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsSellMarket('selllimit',
-            { apikey: API_KEY, nonce: Date.now(), config }
-          ),
-          API_SECRET))),
-
-  cancel: async (orderid) =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsMarket('cancel',
-            { apikey: API_KEY, nonce: Date.now(), orderid }
-          ),
-          API_SECRET))),
-
-  getopenorders: async () =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsMarket( 'getopenorders', 
-                            { apikey: API_KEY, nonce: Date.now() }
-                          ), 
-          API_SECRET ))),
-
-  getbalances: async (currencies = '') =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getbalances',
-            { apikey: API_KEY, nonce: Date.now(), currencies }
-          ),
-          API_SECRET))),
-
-  getbalance: async (currency = 'HTML') =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getbalance',
-            { apikey: API_KEY, nonce: Date.now(), currency }
-          ),
-          API_SECRET))),
-
-  getdepositaddress: async (currency = 'HTML') =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getdepositaddress',
-            { apikey: API_KEY, nonce: Date.now(), currency }
-          ),
-          API_SECRET))),
-
-  getorder: async (orderid = '84545304') =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getorder',
-            { apikey: API_KEY, nonce: Date.now(), orderid }
-          ),
-          API_SECRET))),
-
-  getorderhistory: async (orderid) => // orderid
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getorderhistory',
-            { apikey: API_KEY, nonce: Date.now(), orderid }
-          ),
-          API_SECRET))),
-
-  getdeposithistory: async () =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getdeposithistory',
-            { apikey: API_KEY, nonce: Date.now() }
-          ),
-          API_SECRET))),
-
-  getwithdrawhistory: async () =>
-    getResult(
-      await axios(
-        getAPISign(
-          getOptionsAccount('getwithdrawhistory',
-            { apikey: API_KEY, nonce: Date.now() }
-          ),
-          API_SECRET))),
-
-  // getwithdrawhistory: async () =>
-  //   getResult(
-  //     await axios(
-  //       getAPISign(
-  //         getOptionsAccount('getwithdrawhistory',
-  //           { apikey: API_KEY, nonce: Date.now() }
-  //         ),
-  //         API_SECRET))),
-
-
+  public: require('./apis/public'),
+  market: require('./apis/market'),
+  account: require('./apis/account'),
 }
 
 const getPercentage = (total, percent) => total * ( percent / 100 )
@@ -405,18 +280,18 @@ const listCandle = [{
     "Quantity": 120.00000000,
     "Price": 0.00022,
     "Total": 2,
-    "OrderType": "SELL"
-  //   "TimeStamp": "2014-07-29 18:09:35",
-  //   "Quantity": 120.00000000,
-  //   "Price": 0.00000029,
-  //   "Total": 0.360234432,
-  //   "OrderType": "BUY"
+    "OrderType": "SELL",
+    "TimeStamp": "2014-07-29 18:09:35",
+    "Quantity": 120.00000000,
+    "Price": 0.00029,
+    "Total": 0.360234432,
+    "OrderType": "BUY"
   // }, {
-  //   "TimeStamp": "2014-07-29 18:10:05",
-  //   "Quantity": 120.00000000,
-  //   "Price": 0.00000029,
-  //   "Total": 0.360234432,
-  //   "OrderType": "BUY"
+    // "TimeStamp": "2014-07-29 18:10:05",
+    // "Quantity": 120.00000000,
+    // "Price": 0.00040,
+    // "Total": 0.360234432,
+    // "OrderType": "BUY"
   }
 ]
 // getcandles: async ({ market = 'HTML_BTC', period = '30m', count = 1000, lasthours = 24 }) => {
@@ -524,31 +399,100 @@ const toCandle = (obj, cur, i, list) => {
 //       }
 //       ]
 // }
+
+const isInPeriod = (start, end, time) => (time <= start && time >= end)
+const toWrapperCandles = (candleTime) => (arr, cur, i, list) => {
+  const minute = 60000
+  const candlePeriod = candleTime * minute
+  const start = new Date(list[0].TimeStamp).getTime()
+
+  const time = new Date(cur.TimeStamp).getTime()
+  const end = start - candlePeriod
+
+  const isIn = isInPeriod(start, end , time)
+  // 1406668175000 1406668115000 1406668125000
+  console.log('------------------------------------');
+  console.log('isIn: ', isIn, start, end, time, cur);
+  console.log('------------------------------------');
+
+  // const arr = []
+  if (isInPeriod(start, end, time)) {
+    arr.push(cur)
+    
+  }
+
+  return arr
+}
+
 const getCandles = (listCandle) => {
 // ({ market = 'HTML_BTC', size = 1, count = 1000, period = 24 }) => {
-  const list = listCandle.reverse()
+  const list = listCandle.reverse() // precisa vir do mais atual para omais antigo
   const candleSize = 1
-  
+
+  console.log('list: ', list);
+  const list2 = list.reduce(toWrapperCandles(candleSize))
+  console.log('list2: ', list2);
+  // const candles = list2.map((candle) => candle.reduce(toCandle, {}))
   // const candles = list.reduce(toCandle(candleSize), {})
-  const candles = list.reduce(toCandle, {})
-  console.log('------------------------------------');
-  console.log('candles: ', candles);
-  console.log('------------------------------------');
+  // const candles = list.reduce(toCandle, {})
+  // console.log('------------------------------------');
+  // console.log('candles: ', candles);
+  // console.log('------------------------------------');
+
+  // return candles
 }
 
-console.log(getCandles(listCandle))
-// const RS = (list, period) => 
-// const RSI = (period) => (list) => 100 – (100 / (1 + RS(list, period)))
 
-const Suisseba = {
-  moreVolatile,
-  getPositiveChangeAndLastAboveAVG
-}
 
 const sum = (x, y) => x + y
-const divide = (x, y) => x / y 
+const minus = (x, y) => x - y
+const divide = (x, y) => x / y
 const avg = (...list) => divide(list.reduce(sum, 0), list.length)
 const decimals = (decimal) => (x) => Number(Number(x).toFixed(decimal))
+
+const toRS = (obj, cur, i) => {
+  if (!i) {
+    obj.High = 0
+    obj.Low = 0
+  }
+
+  obj.High = (cur.Type === 'green') ? obj.High + 1 : obj.High
+  obj.Low = (cur.Type === 'red') ? obj.Low + 1 : obj.Low
+
+  return obj
+}
+const RS = (list = [], period = 1) => {
+
+  console.log('------------------------------------');
+  console.log('RS list: ', list);
+  const AVG = list.reduce(toRS, {})
+
+  console.log('------------------------------------');
+  console.log('RS: ', AVG);
+  console.log('------------------------------------');
+
+  return AVG
+}
+const RSI = (list, period) => minus(100, (100 / (1 + RS([list], period))))
+
+
+// const getPriceChange = (market) => (period) => {
+
+//   const res = actions.getmarkethistory(market)
+// }
+
+// console.log('------------------------------------');
+// console.log(actions.public);
+console.log(actions.public.getcurrencies);
+// console.log('------------------------------------');
+  (async () => console.log('getcurrencies: ',  await actions.public.getcurrencies()))()
+  // console.log(RSI(getCandles(listCandle, 1) ))
+  
+const Suisseba = {
+  moreVolatile,
+  getCandles,
+  getPositiveChangeAndLastAboveAVG
+}
 
 // const with2decimals = decimals(2)
 // avg(2, 2, 3, 3, 10, 10, 10)
