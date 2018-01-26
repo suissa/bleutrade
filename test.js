@@ -28,7 +28,8 @@ const toChange = (obj) => {
   return _obj
 }
 
-const ACTION = 'getPositiveChangeAndLastAboveAVG'
+const API = 'bonus'
+const ACTION = 'getPriceChange'
 
 ;(async () => {
   try {
@@ -52,10 +53,23 @@ const ACTION = 'getPositiveChangeAndLastAboveAVG'
       count: 1000,
       lasthours: 48,
     }
-    const result = await bleutrade[ACTION]()
+
+    const market = 'DOGE_BTC'
+    const result = await bleutrade[API][ACTION](params3.market, 120)
 
     console.log('------------------------------------');
-    console.log(ACTION+' result: ', result);
+    console.log(ACTION + ' result: ', result);
+
+    // console.log('getPriceChange1Hour result: ', 
+    //   await bleutrade[API].getPriceChange1Hour(market));
+
+    // console.log('getPriceChange12Hours result: ',
+    //   await bleutrade[API].getPriceChange12Hours(params3.market));
+
+    // console.log('getPriceChange1Week result: ',
+    //   await bleutrade[API].getPriceChange1Week(market));
+    // console.log(' result: ', result);
+    // console.log(' result: ', result);
     console.log('------------------------------------');
   } catch (error) {
     throw new Error(error.stack)

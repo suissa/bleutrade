@@ -151,30 +151,31 @@ const getPositiveChangeAndLastAboveAVG = async () => {
 
 }
 
-const ifIsInPeriod = (start, period) => (obj) =>{
-  const end = start - period
-  const curDate = getDateTimestamp(obj.TimeStamp)
-  return (curDate >= end)
+const getStartObj = (list) => list[0]
+const getEndObj = (list, startObj, periodMinutes) => 
+  list.filter(ifIsInPeriod(getDateTimestamp(startObj.TimeStamp), periodMinutes))
+      .reverse()[0]
 
-}
+const ifIsInPeriod = (start, period) => (obj) =>
+  (getDateTimestamp(obj.TimeStamp) >= start - period)
 
-const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
+const transformMinutesInMS = (minutes) => minutes * MINUTES_IN_MS
+
+const getPriceChange = async (market = 'HTML_BTC', period = 1) => {
   try {
-    const periodMinutes = (period > 360) ? 200 : 100
-    const res = await actions.public.getmarkethistory(market, periodMinutes)
-    const startObj = res[0]
+    const periodMinutes = transformMinutesInMS(period)
+    const periodCount = (periodMinutes > 3600000) ? 200 : 100
+    const res = await actions.public.getmarkethistory(market, periodCount)
 
-    const endObj = res.filter(
-                              ifIsInPeriod(
-                                getDateTimestamp(startObj.TimeStamp), 
-                                period * MINUTES_IN_MS)
-    ).reverse()[0]
+    const startObj = getStartObj(res)
+    const endObj = getEndObj(res, startObj, periodMinutes)
 
-    // const endObj = result
     const change = getChange(Number(endObj.Price), Number(startObj.Price))
-    console.log('------------------------------------');
 
+    console.log('------------------------------------');
     console.log('Market: ', market);
+    // console.log('startObj: ', startObj);
+    // console.log('endObj: ', endObj);
     console.log('------------------------------------');
 
     console.log('Period minutes: ', period);
@@ -185,13 +186,20 @@ const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
     console.log('Current Price: ', startObj.Price)
     console.log('Previous Price: ', endObj.Price);
     console.log('Change %: ', change);
-    console.log('------------------------------------');
+    console.log('------------------------------------\n\n');
     return with2decimals(change)
   } catch (error) {
     throw new Error(error.stack)
   }
 }
 
+const getPriceChange1Minute = (market) => getPriceChange(market, 1)
+const getPriceChange15Minutes = (market) => getPriceChange(market, 15)
+const getPriceChange30Minutes = (market) => getPriceChange(market, 30)
+const getPriceChange1Hour = (market) => getPriceChange(market, 60)
+const getPriceChange12Hours = (market) => getPriceChange(market, 12 * 60)
+const getPriceChange24Hours = (market) => getPriceChange(market, 24 * 60)
+const getPriceChange1Week = (market) => getPriceChange(market, 7 * 24 * 60)
 
 // const getPositiveChangeAndLastAboveAVG = async () => {
 //   try {
@@ -205,10 +213,10 @@ const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
 
 // }
 
-(async () => {
-  const fn = getPriceChange
-  console.log('getPriceChange: ', await fn('DOGE_BTC'))
-})()
+// (async () => {
+//   const fn = getPriceChange
+//   console.log('getPriceChange: ', await fn('DOGE_BTC'))
+// })()
 
 
 const listCandle = [{
@@ -434,7 +442,16 @@ module.exports = {
   moreVolatile,
   getCandles,
   getPositiveChangeAndLastAboveAVG,
-  getPriceChange
+
+  getPriceChange,
+
+  getPriceChange1Minute,  
+  getPriceChange15Minutes,  
+  getPriceChange30Minutes,  
+  getPriceChange1Hour,  
+  getPriceChange12Hours,  
+  getPriceChange24Hours,  
+  getPriceChange1Week,  
 }
 
 // const with2decimals = decimals(2)

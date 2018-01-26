@@ -22,9 +22,11 @@ const actions = {
 
 // console.log(actions.bonus.getPriceChange);
 // console.log('------------------------------------');
-// (async () => {
+
+// ;(async () => {
 //   const fn = actions.bonus.getPriceChange
-//   console.log('getPriceChange: ', await fn())})()
+//     console.log('getPriceChange: ', await fn('DOGE_BTC'))}
+// )()
   // console.log(RSI(getCandles(listCandle, 1) ))
 
 
@@ -37,7 +39,7 @@ const Bleutrade = (key, secret, requeue = 0) => {
   config.requeue = requeue
 
 
-  return Object.assign(actions, Suisseba)
+  return actions
 }
 
 module.exports = Bleutrade;
