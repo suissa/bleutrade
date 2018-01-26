@@ -1,4 +1,12 @@
-
+const MINUTES_IN_MS = 60000
+const actions = {
+  public: require('../../apis/public'),
+  market: require('../../apis/market'),
+  account: require('../../apis/account'),
+}
+// console.log('------------------------------------');
+// console.log(actions);
+// console.log('------------------------------------');
 const getPercentage = (total, percent) => total * ( percent / 100 )
 
 
@@ -62,6 +70,26 @@ const byDESC = (field) => (a, b) => {
 
 const getProportion = (x, y) => x / y 
 
+const getDateTimestamp = (timeStamp) => new Date(timeStamp).getTime()
+const getLastDateTimestamp = (list) => new Date(list[0].TimeStamp).getTime()
+
+
+const byPriceChange = (obj) => {
+
+}
+// const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
+//   const history = await actions.public.getmarkethistory(market, period)
+
+//   const start = getLastDateTimestamp(history)
+
+//   const list = history.filter(byPriceChange)
+//   console.log('------------------------------------');
+//   // console.log('history: ', history);
+//   console.log('start: ', start);
+//   console.log('------------------------------------');
+//   // return history
+// }
+
 const getChange = (lower, bigger) => ( bigger / lower - 1 ) * 100
 
 const toChangeData = (coin) => {
@@ -87,7 +115,7 @@ const toChangeData = (coin) => {
 
 const moreVolatile = async () => {
   try {
-    const res = await actions.getmarketsummaries()
+    const res = await actions.public.getmarketsummaries()
 
     const result = res.filter(byPositiveLastDailyChange)
       .map(toChangeData)
@@ -112,6 +140,60 @@ const getPositiveChangeAndLastAboveAVG = async () => {
   }
 
 }
+
+const ifIsInPeriod = (start, period) => (obj) =>{
+  const end = start - period
+  const curDate = getDateTimestamp(obj.TimeStamp)
+  // console.log('------------------------------------');
+  // console.log(start, end, curDate);
+  // console.log('------------------------------------');
+  return (curDate >= end)
+
+}
+
+const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
+  try {
+    const res = await actions.public.getmarkethistory(market, period)
+
+    const startObj = res[0]
+    // const start = getLastDateTimestamp(res)
+    const start = getDateTimestamp(startObj.TimeStamp)
+    // const _period = 
+    const result = res.filter(ifIsInPeriod(start, period * MINUTES_IN_MS))
+
+    const endObj = result.reverse()[0]
+
+    const change = getChange(Number(endObj.Price), Number(startObj.Price)) 
+    // console.log('------------------------------------');
+    // console.log('res: ', res[0], res[1]);
+    console.log('startObj: ', startObj);
+    console.log('endObj: ', endObj);
+    console.log('change: ', change);
+    // console.log('------------------------------------');
+    // return result
+  } catch (error) {
+    throw new Error(error.stack)
+  }
+}
+
+
+// const getPositiveChangeAndLastAboveAVG = async () => {
+//   try {
+//     const res = await moreVolatile()
+
+//     const result = res.filter(byPositiveChangeAndLastAboveAVG)
+//     return result
+//   } catch (error) {
+//     throw new Error(error.stack)
+//   }
+
+// }
+
+(async () => {
+  const fn = getPriceChange
+  console.log('getPriceChange: ', await fn())
+})()
+
 
 const listCandle = [{
   "TimeStamp": "2014-07-29 18:08:00",
@@ -341,7 +423,8 @@ const RSI = (list, period) => minus(100, (100 / (1 + RS([list], period))))
 module.exports = {
   moreVolatile,
   getCandles,
-  getPositiveChangeAndLastAboveAVG
+  getPositiveChangeAndLastAboveAVG,
+  getPriceChange
 }
 
 // const with2decimals = decimals(2)

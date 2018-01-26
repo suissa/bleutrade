@@ -20,12 +20,14 @@ const actions = {
   bonus: require('./apis/bonus')
 }
 
-console.log(actions.account.getbalances);
+// console.log(actions.bonus.getPriceChange);
 // console.log('------------------------------------');
-(async () => console.log('getbalances: ', await actions.account.getbalances()))()
+// (async () => {
+//   const fn = actions.bonus.getPriceChange
+//   console.log('getPriceChange: ', await fn())})()
   // console.log(RSI(getCandles(listCandle, 1) ))
 
-  
+
 const Bleutrade = (key, secret, requeue = 0) => {
   const config = {}
 

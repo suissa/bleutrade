@@ -7,9 +7,9 @@ const config = {
 }
 
 const { getResult, getAPISign, getURL } = require('../../helpers')
-console.log('------------------------------------');
-console.log('getAPISign: ', getAPISign);
-console.log('------------------------------------');
+// console.log('------------------------------------');
+// console.log('getAPISign: ', getAPISign);
+// console.log('------------------------------------');
 const getOptionsAccount = require('./getOptionsAccount')(config)
 
 module.exports = {
