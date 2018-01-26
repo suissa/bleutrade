@@ -7,8 +7,18 @@ const actions = {
 // console.log('------------------------------------');
 // console.log(actions);
 // console.log('------------------------------------');
-const getPercentage = (total, percent) => total * ( percent / 100 )
 
+
+const sum = (x, y) => x + y
+const minus = (x, y) => x - y
+const divide = (x, y) => x / y
+const avg = (...list) => divide(list.reduce(sum, 0), list.length)
+const decimals = (decimal) => (x) => Number(Number(x).toFixed(decimal))
+
+
+const with2decimals = decimals(2)
+
+const getPercentage = (total, percent) => total * ( percent / 100 )
 
 const getDailyChange = (coin) => {
 
@@ -153,24 +163,23 @@ const ifIsInPeriod = (start, period) => (obj) =>{
 
 const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
   try {
-    const res = await actions.public.getmarkethistory(market, period)
-
+    const periodMinutes = (period > 360) ? 200 : 100
+    const res = await actions.public.getmarkethistory(market, periodMinutes)
     const startObj = res[0]
-    // const start = getLastDateTimestamp(res)
-    const start = getDateTimestamp(startObj.TimeStamp)
-    // const _period = 
-    const result = res.filter(ifIsInPeriod(start, period * MINUTES_IN_MS))
 
-    const endObj = result.reverse()[0]
+    const endObj = res.filter(
+                              ifIsInPeriod(
+                                getDateTimestamp(startObj.TimeStamp), 
+                                period * MINUTES_IN_MS)
+    ).reverse()[0]
 
-    const change = getChange(Number(endObj.Price), Number(startObj.Price)) 
-    // console.log('------------------------------------');
-    // console.log('res: ', res[0], res[1]);
-    console.log('startObj: ', startObj);
-    console.log('endObj: ', endObj);
+    // const endObj = result
+    const change = getChange(Number(endObj.Price), Number(startObj.Price))
+    console.log('------------------------------------');
+    console.log(startObj.Price, endObj.Price);
     console.log('change: ', change);
-    // console.log('------------------------------------');
-    // return result
+    console.log('------------------------------------');
+    return with2decimals(change)
   } catch (error) {
     throw new Error(error.stack)
   }
@@ -388,12 +397,6 @@ const getCandles = (listCandle) => {
 }
 
 
-
-const sum = (x, y) => x + y
-const minus = (x, y) => x - y
-const divide = (x, y) => x / y
-const avg = (...list) => divide(list.reduce(sum, 0), list.length)
-const decimals = (decimal) => (x) => Number(Number(x).toFixed(decimal))
 
 const toRS = (obj, cur, i) => {
   if (!i) {
