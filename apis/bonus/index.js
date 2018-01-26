@@ -140,17 +140,18 @@ const moreVolatile = require('./moreVolatile')
 //   }
 // }
 
-const getPositiveChangeAndLastAboveAVG = async () => {
-  try {
-    const res = await moreVolatile()
+const getPositiveChangeAndLastAboveAVG = require('./getPositiveChangeAndLastAboveAVG')
+// async () => {
+//   try {
+//     const res = await moreVolatile()
 
-    const result = res.filter(byPositiveChangeAndLastAboveAVG)
-    return result
-  } catch (error) {
-    throw new Error(error.stack)
-  }
+//     const result = res.filter(byPositiveChangeAndLastAboveAVG)
+//     return result
+//   } catch (error) {
+//     throw new Error(error.stack)
+//   }
 
-}
+// }
 
 const isAbovePeriod = (start, period) => (obj) =>
   (getDateTimestamp(obj.TimeStamp) >= start - period)

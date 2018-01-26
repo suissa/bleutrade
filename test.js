@@ -29,7 +29,7 @@ const toChange = (obj) => {
 }
 
 const API = 'bonus'
-const ACTION = 'moreVolatile'
+const ACTION = 'getPositiveChangeAndLastAboveAVG'
 
 ;(async () => {
   try {
