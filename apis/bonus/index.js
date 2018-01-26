@@ -154,9 +154,6 @@ const getPositiveChangeAndLastAboveAVG = async () => {
 const ifIsInPeriod = (start, period) => (obj) =>{
   const end = start - period
   const curDate = getDateTimestamp(obj.TimeStamp)
-  // console.log('------------------------------------');
-  // console.log(start, end, curDate);
-  // console.log('------------------------------------');
   return (curDate >= end)
 
 }
@@ -176,8 +173,11 @@ const getPriceChange = async (market = 'HTML_BTC', period = 60) => {
     // const endObj = result
     const change = getChange(Number(endObj.Price), Number(startObj.Price))
     console.log('------------------------------------');
-    console.log(startObj.Price, endObj.Price);
-    console.log('change: ', change);
+
+    console.log('Market: ', market);
+    console.log('Current Price: ', startObj.Price)
+    console.log('Previous Price: ', endObj.Price);
+    console.log('Change %: ', change);
     console.log('------------------------------------');
     return with2decimals(change)
   } catch (error) {
