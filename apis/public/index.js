@@ -29,10 +29,10 @@ module.exports = {
   getmarkethistory: async (market = 'HTML_BTC', count = 20) =>
     getResult(await axios(getOptionsPublic('getmarkethistory', { market, count }, {}))),
 
-  // getorderbook: async (market = 'HTML_BTC', type = 'ALL', depth = 20) =>
-  //   getResult(await axios(getOptionsPublic('getorderbook', { market }, {}))),
+  getorderbook: async (market = 'HTML_BTC', type = 'ALL', depth = 20) =>
+    getResult(await axios(getOptionsPublic('getorderbook', { market }, {}))),
+  // api_query('getorderbook', callback, { market: market, period: period, count: count, lasthours: lasthours });
 
-
-    // api_query('getorderbook', callback, { market: market, period: period, count: count, lasthours: lasthours });
-  
+  getcandles: async(market = 'HTML_BTC', period = '30m') =>
+    getResult(await axios(getOptionsPublic('getcandles', { market, period }, {}))),
 }

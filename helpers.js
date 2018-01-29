@@ -1,19 +1,18 @@
 const hmac = require("crypto").createHmac
 const stringify = require("querystring").stringify
 
-const getProportion = (x, y) => x / y
+const Math = require('./helpers.math')
 
+const getProportion = (x, y) => x / y
+const getChange = (lower, bigger) => (bigger / lower - 1) * 100
 const getDateTimestamp = (timeStamp) => new Date(timeStamp).getTime()
 const getLastDateTimestamp = (list) => new Date(list[0].TimeStamp).getTime()
-
-const getChange = (lower, bigger) => (bigger / lower - 1) * 100
 
 const getURL = (config) => (action, params) => //API_URL + action + '?' + stringify(params)
   console.log(config.API_URL + action + '?' + stringify(params))
 
 const getResult = (result) =>
   (result.data.success === 'true') ? result.data.result : []
-
 
 const getAPISign = (options, apisecret) => {
   const hmac = new hmac("sha512", apisecret)
@@ -22,9 +21,7 @@ const getAPISign = (options, apisecret) => {
   return options
 }
 
-
 const byMarketname_BTC = (coin) => coin.MarketName.endsWith('_BTC')
-
 const byPositiveAverageDailyChange = (coin) => Number(coin.Average) > Number(coin.PrevDay)
 const byPositiveLastDailyChange = (coin) => Number(coin.Last) > Number(coin.PrevDay)
 const byPositiveLastOrAVGDailyChange = (coin) =>

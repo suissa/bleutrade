@@ -23,10 +23,10 @@ const actions = {
 // console.log(actions.bonus.getPriceChange);
 // console.log('------------------------------------');
 
-// ;(async () => {
-//   const fn = actions.bonus.getPriceChange
-//     console.log('getPriceChange: ', await fn('DOGE_BTC'))}
-// )()
+;(async () => {
+  const fn = actions.public.getcandles
+    console.log('getcandles: ', await fn('DOGE_BTC'))}
+)()
   // console.log(RSI(getCandles(listCandle, 1) ))
 
 
